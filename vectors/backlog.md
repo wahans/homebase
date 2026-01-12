@@ -80,6 +80,8 @@
 
 8. **explore auth/login revamp - no email login, magic link only? what are the options here. email login is another password to save and can be clunky.
 
+9. **review branded app icons.
+
 ---
 
 ## Bugs
@@ -246,7 +248,7 @@
 
 ```
 Vectors Root:
-/Users/wallyhansen/Desktop/personal/riverside co/homebase/vectors/
+/Users/wallyhansen/Desktop/projects/riverside co/homebase/vectors/
 
 Key Files:
 ├── App.js                     # Main entry (auth, navigation, GestureHandler)
@@ -284,7 +286,7 @@ Key Files:
 └── /assets                    # App icons and splash screens
 
 Parent Homebase Docs:
-/Users/wallyhansen/Desktop/personal/riverside co/homebase/
+/Users/wallyhansen/Desktop/projects/riverside co/homebase/
 ├── HOMEBASE_PROJECT_BRIEF.md  # Vision, cornerstones, principles
 ├── HOMEBASE_DEVELOPMENT_PLAN.md # Architecture, roadmap
 └── BACKLOG.md                 # Platform-level backlog
@@ -354,7 +356,7 @@ I'm thinking about [architectural decision]. What are the tradeoffs?
 
 ```bash
 # Navigate to project
-cd "/Users/wallyhansen/Desktop/personal/riverside co/homebase/vectors"
+cd "/Users/wallyhansen/Desktop/projects/riverside co/homebase/vectors"
 
 # Install dependencies
 npm install
