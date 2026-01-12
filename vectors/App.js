@@ -15,7 +15,7 @@ import theme from './theme';
 
 // Screens
 import LoginScreen from './screens/LoginScreen';
-import TasksScreen from './screens/TasksScreen';
+import TaskListScreen from './screens/TaskListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,7 +64,7 @@ export default function App() {
           {session ? (
             <Stack.Screen
               name="Tasks"
-              component={TasksScreen}
+              component={TaskListScreen}
               options={{
                 title: 'Vectors',
                 headerLargeTitle: true,

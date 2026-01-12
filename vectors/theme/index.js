@@ -125,10 +125,10 @@ export const typography = {
 
   // Font weights
   fontWeight: {
-    regular: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
+    regular: '300',
+    medium: '400',
+    semibold: '500',
+    bold: '600',
   },
 
   // Pre-defined text styles
@@ -136,25 +136,25 @@ export const typography = {
     // Headings
     h1: {
       fontSize: 30,
-      fontWeight: '700',
+      fontWeight: '600',
       lineHeight: 36,
       color: '#18181B',
     },
     h2: {
       fontSize: 24,
-      fontWeight: '700',
+      fontWeight: '600',
       lineHeight: 30,
       color: '#18181B',
     },
     h3: {
       fontSize: 20,
-      fontWeight: '600',
+      fontWeight: '500',
       lineHeight: 26,
       color: '#18181B',
     },
     h4: {
       fontSize: 17,
-      fontWeight: '600',
+      fontWeight: '500',
       lineHeight: 24,
       color: '#18181B',
     },
@@ -162,19 +162,19 @@ export const typography = {
     // Body text
     bodyLarge: {
       fontSize: 17,
-      fontWeight: '400',
+      fontWeight: '300',
       lineHeight: 26,
       color: '#18181B',
     },
     body: {
       fontSize: 15,
-      fontWeight: '400',
+      fontWeight: '300',
       lineHeight: 22,
       color: '#18181B',
     },
     bodySmall: {
       fontSize: 13,
-      fontWeight: '400',
+      fontWeight: '300',
       lineHeight: 18,
       color: '#52525B',
     },
@@ -182,13 +182,13 @@ export const typography = {
     // Labels
     label: {
       fontSize: 13,
-      fontWeight: '500',
+      fontWeight: '400',
       lineHeight: 18,
       color: '#52525B',
     },
     labelSmall: {
       fontSize: 11,
-      fontWeight: '500',
+      fontWeight: '400',
       lineHeight: 14,
       color: '#71717A',
       textTransform: 'uppercase',
@@ -198,7 +198,7 @@ export const typography = {
     // Caption
     caption: {
       fontSize: 12,
-      fontWeight: '400',
+      fontWeight: '300',
       lineHeight: 16,
       color: '#71717A',
     },
