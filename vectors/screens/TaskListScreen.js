@@ -20,6 +20,7 @@ import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler'
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import QRCode from 'react-native-qrcode-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '../lib/supabase';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -1806,7 +1807,11 @@ export default function TaskListScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <LinearGradient
+        colors={['#EBE5FF', '#E0D9FE', '#F0EDF8']}
+        locations={[0, 0.5, 1]}
+        style={styles.header}
+      >
         <View style={styles.headerBrand}>
           <View style={styles.headerLogoIcon}>
             <View style={styles.headerLogoArrow1} />
@@ -1828,7 +1833,7 @@ export default function TaskListScreen() {
             <Text style={styles.headerButtonText}>{partner ? '👫' : '👤'}</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
 
       {/* Search */}
       {showSearch && (
@@ -2766,8 +2771,8 @@ export default function TaskListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFFFFF' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12, backgroundColor: '#FFFFFF' },
+  container: { flex: 1, backgroundColor: '#FAFAFA' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12, backgroundColor: 'transparent' },
   headerBrand: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   headerLogoIcon: { width: 28, height: 28, position: 'relative' },
   headerLogoArrow1: { position: 'absolute', width: 14, height: 14, borderLeftWidth: 2.5, borderBottomWidth: 2.5, borderColor: '#7C3AED', transform: [{ rotate: '45deg' }], top: 3, left: 3, borderRadius: 2 },

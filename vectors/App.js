@@ -66,8 +66,7 @@ export default function App() {
               name="Tasks"
               component={TaskListScreen}
               options={{
-                title: 'Vectors',
-                headerLargeTitle: true,
+                headerShown: false,
               }}
             />
           ) : (
