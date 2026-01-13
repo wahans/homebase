@@ -17,6 +17,7 @@ import {
   RefreshControl
 } from 'react-native';
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import QRCode from 'react-native-qrcode-svg';
@@ -26,6 +27,8 @@ import { supabase } from '../lib/supabase';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function TaskListScreen() {
+  const insets = useSafeAreaInsets();
+
   // Core state
   const [tasks, setTasks] = useState([]);
   const [displayTasks, setDisplayTasks] = useState([]);
@@ -48,6 +51,7 @@ export default function TaskListScreen() {
   const [groupBy, setGroupBy] = useState('none'); // 'none'|'assignee'|'priority'|'status'|'dueDate'
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const [showGroupByPicker, setShowGroupByPicker] = useState(false);
+  const [showSortPicker, setShowSortPicker] = useState(false);
   const [viewMode, setViewMode] = useState('list'); // 'list' | 'kanban'
 
   // Boards
@@ -1249,6 +1253,14 @@ export default function TaskListScreen() {
     }
   };
 
+  // Sorting helpers
+  const sortByLabels = {
+    manual: 'Manual',
+    created: 'Newest',
+    due: 'Due',
+    priority: 'Priority'
+  };
+
   // Grouping helpers
   const groupByLabels = {
     none: 'None',
@@ -1810,7 +1822,7 @@ export default function TaskListScreen() {
       <LinearGradient
         colors={['#EBE5FF', '#E0D9FE', '#F0EDF8']}
         locations={[0, 0.5, 1]}
-        style={styles.header}
+        style={[styles.header, { paddingTop: insets.top + 12 }]}
       >
         <View style={styles.headerBrand}>
           <View style={styles.headerLogoIcon}>
@@ -1905,18 +1917,32 @@ export default function TaskListScreen() {
 
       {/* Sort, Group & View Toggle */}
       <View style={styles.sortGroupRow}>
-        <View style={styles.sortContainer}>
-          <Text style={styles.sortLabel}>Sort:</Text>
-          {[{ key: 'manual', label: 'Manual' }, { key: 'created', label: 'Newest' }, { key: 'due', label: 'Due' }, { key: 'priority', label: 'Priority' }].map(option => (
-            <TouchableOpacity
-              key={option.key}
-              style={[styles.sortButton, sortBy === option.key && styles.sortButtonActive]}
-              onPress={() => setSortBy(option.key)}
-            >
-              <Text style={[styles.sortButtonText, sortBy === option.key && styles.sortButtonTextActive]}>{option.label}</Text>
-            </TouchableOpacity>
-          ))}
+        {/* Sort By Dropdown */}
+        <View style={styles.sortByWrapper}>
+          <Text style={styles.sortByLabel}>Sort:</Text>
+          <TouchableOpacity
+            style={styles.sortByDropdown}
+            onPress={() => { setShowSortPicker(!showSortPicker); setShowGroupByPicker(false); }}
+          >
+            <Text style={styles.sortByDropdownText}>{sortByLabels[sortBy]}</Text>
+            <Text style={styles.sortByDropdownArrow}>{showSortPicker ? '▲' : '▼'}</Text>
+          </TouchableOpacity>
+          {showSortPicker && (
+            <View style={styles.sortByDropdownMenu}>
+              {Object.entries(sortByLabels).map(([key, label]) => (
+                <TouchableOpacity
+                  key={key}
+                  style={[styles.sortByMenuItem, sortBy === key && styles.sortByMenuItemActive]}
+                  onPress={() => { setSortBy(key); setShowSortPicker(false); }}
+                >
+                  <Text style={[styles.sortByMenuItemText, sortBy === key && styles.sortByMenuItemTextActive]}>{label}</Text>
+                  {sortBy === key && <Text style={styles.sortByMenuItemCheck}>✓</Text>}
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </View>
+
         <View style={styles.viewControls}>
           {/* View Toggle */}
           <View style={styles.viewToggle}>
@@ -1933,17 +1959,16 @@ export default function TaskListScreen() {
               <Text style={[styles.viewToggleText, viewMode === 'kanban' && styles.viewToggleTextActive]}>▦</Text>
             </TouchableOpacity>
           </View>
-          {/* Group By */}
+          {/* Group By Dropdown */}
           <View style={styles.groupByWrapper}>
             <Text style={styles.groupByLabel}>Group:</Text>
             <TouchableOpacity
               style={styles.groupByDropdown}
-              onPress={() => setShowGroupByPicker(!showGroupByPicker)}
+              onPress={() => { setShowGroupByPicker(!showGroupByPicker); setShowSortPicker(false); }}
             >
               <Text style={styles.groupByDropdownText}>{groupByLabels[groupBy]}</Text>
               <Text style={styles.groupByDropdownArrow}>{showGroupByPicker ? '▲' : '▼'}</Text>
             </TouchableOpacity>
-            {/* Dropdown Menu */}
             {showGroupByPicker && (
               <View style={styles.groupByDropdownMenu}>
                 {Object.entries(groupByLabels).map(([key, label]) => (
@@ -2095,6 +2120,11 @@ export default function TaskListScreen() {
           windowSize={10}
         />
       )}
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>built with ❤️ by the homebase team</Text>
+      </View>
 
       {/* ==================== MODALS ==================== */}
 
@@ -2797,6 +2827,21 @@ const styles = StyleSheet.create({
   statusFilterText: { fontSize: 13, color: '#6B7280', fontWeight: '500' },
   statusFilterTextActive: { color: '#7C3AED', fontWeight: '600' },
   sortGroupRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#F3F4F6', zIndex: 100 },
+
+  // Sort By styles (dropdown)
+  sortByWrapper: { flexDirection: 'row', alignItems: 'center', gap: 4, position: 'relative', zIndex: 101 },
+  sortByLabel: { fontSize: 13, color: '#9CA3AF' },
+  sortByDropdown: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 7, backgroundColor: '#F3F4F6', borderRadius: 8, gap: 6 },
+  sortByDropdownText: { fontSize: 13, color: '#374151', fontWeight: '500' },
+  sortByDropdownArrow: { fontSize: 10, color: '#9CA3AF' },
+  sortByDropdownMenu: { position: 'absolute', top: '100%', left: 0, marginTop: 4, backgroundColor: '#FFFFFF', borderRadius: 10, borderWidth: 1, borderColor: '#E5E7EB', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 16, elevation: 8, minWidth: 120, zIndex: 1000 },
+  sortByMenuItem: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: '#F3F4F6' },
+  sortByMenuItemActive: { backgroundColor: '#F3E8FF' },
+  sortByMenuItemText: { fontSize: 14, color: '#374151' },
+  sortByMenuItemTextActive: { color: '#7C3AED', fontWeight: '600' },
+  sortByMenuItemCheck: { fontSize: 14, color: '#7C3AED', fontWeight: '600' },
+
+  // Legacy sort styles (keeping for compatibility)
   sortContainer: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   sortLabel: { fontSize: 13, color: '#9CA3AF', marginRight: 2 },
   sortButton: { paddingVertical: 5, paddingHorizontal: 10, borderRadius: 6, backgroundColor: '#F3F4F6' },
@@ -3158,4 +3203,8 @@ const styles = StyleSheet.create({
   calendarDayToday: { color: '#FFFFFF', backgroundColor: '#7C3AED', borderRadius: 12, width: 24, height: 24, textAlign: 'center', lineHeight: 24, overflow: 'hidden' },
   calendarDots: { flexDirection: 'row', marginTop: 2, gap: 2 },
   calendarDot: { width: 6, height: 6, borderRadius: 3 },
+
+  // Footer styles
+  footer: { paddingVertical: 16, paddingHorizontal: 16, backgroundColor: '#FAFAFA', alignItems: 'center', justifyContent: 'center' },
+  footerText: { fontSize: 12, color: '#9CA3AF', fontWeight: '400' },
 });
