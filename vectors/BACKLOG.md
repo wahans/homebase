@@ -18,6 +18,13 @@
 
 > Add new feature ideas, enhancements, and "what if" thoughts here
 
+for both web and mobile app:
+- "tags" (e.g., "kids") is showing up on cards as a colored dot in different places (if there is a task description, it's to the right of the end of the description; if no task description, it's under the task name). on the web app, i want this to show as the full tag (as a tag looks like in the edit task module) and not just a dot. in the mobile app, a colored dot only is fine but it needs to show up in the same place consistently - let's have it sit at at the end of the task name (for example, if task name was "grocery shopping" and had a green "shopping" tag, the green dot should show up one character space after the word "shopping" in the name).
+
+for mobile app:
+- when sorting by "manual", the spacing between cards is off. they should show up directly after another but there is blank space between each.
+- put a tiny bit more white space between the search bar at the top and the header area. make the space between header and search bar the same distance as the space between the search bar and the inbox/home/+board buttons.
+
 ### UI/UX Enhancements
 - [ ] Swipe gestures: swipe right to complete, swipe left to assign to partner
 - [ ] Task templates: "Grocery run" pre-populates common items

@@ -1537,7 +1537,7 @@ export default function TaskListScreen() {
             onPress={() => openEditModal(task)}
             activeOpacity={0.6}
           >
-            {/* Line 1: Title + metadata pills */}
+            {/* Line 1: Title + tag dots + metadata pills */}
             <View style={styles.rowLine1}>
               <Text
                 style={[styles.rowTitle, task.completed && styles.rowTitleCompleted]}
@@ -1545,12 +1545,18 @@ export default function TaskListScreen() {
               >
                 {task.title}
               </Text>
-              <View style={styles.rowInlineMeta}>
-                <View style={[styles.rowAssignmentBadge, { backgroundColor: assignmentColor }]}>
-                  <Text style={styles.rowAssignmentBadgeText}>
-                    {task.assigned_to === 'me' ? 'M' : task.assigned_to === 'you' ? 'Y' : 'U'}
-                  </Text>
+              {taskTags.length > 0 && (
+                <View style={styles.rowTagDotsInline}>
+                  {taskTags.slice(0, 3).map(tagId => {
+                    const tag = tags.find(t => t.id === tagId || t.id === Number(tagId));
+                    if (!tag) return null;
+                    return (
+                      <View key={tagId} style={[styles.rowTagMini, { backgroundColor: tag.color }]} />
+                    );
+                  })}
                 </View>
+              )}
+              <View style={styles.rowInlineMeta}>
                 {task.priority && task.priority !== 'none' && (
                   <View style={[styles.rowPriorityBadge, { backgroundColor: priorityColor }]}>
                     <Text style={styles.rowPriorityBadgeText}>{task.priority === 'high' ? '!!' : '!'}</Text>
@@ -1565,24 +1571,19 @@ export default function TaskListScreen() {
               </View>
             </View>
 
-            {/* Line 2: Description + tags + subtasks all inline */}
-            <View style={styles.rowLine2}>
-              {task.description && (
-                <Text style={styles.rowDescriptionInline} numberOfLines={1}>
-                  {task.description.substring(0, 120)}
-                </Text>
-              )}
-              {taskTags.length > 0 && taskTags.slice(0, 3).map(tagId => {
-                const tag = tags.find(t => t.id === tagId || t.id === Number(tagId));
-                if (!tag) return null;
-                return (
-                  <View key={tagId} style={[styles.rowTagMini, { backgroundColor: tag.color }]} />
-                );
-              })}
-              {taskSubtasks.length > 0 && (
-                <Text style={styles.rowSubtaskCount}>☑{progress?.completed || 0}/{taskSubtasks.length}</Text>
-              )}
-            </View>
+            {/* Line 2: Description + subtasks */}
+            {(task.description || taskSubtasks.length > 0) && (
+              <View style={styles.rowLine2}>
+                {task.description && (
+                  <Text style={styles.rowDescriptionInline} numberOfLines={1}>
+                    {task.description.substring(0, 120)}
+                  </Text>
+                )}
+                {taskSubtasks.length > 0 && (
+                  <Text style={styles.rowSubtaskCount}>☑{progress?.completed || 0}/{taskSubtasks.length}</Text>
+                )}
+              </View>
+            )}
 
             {/* Line 3: Inline subtasks if any */}
             {taskSubtasks.length > 0 && (
@@ -1742,11 +1743,6 @@ export default function TaskListScreen() {
               >
                 {task.title}
               </Text>
-              <View style={[styles.rowAssignmentBadge, { backgroundColor: assignmentColor }]}>
-                <Text style={styles.rowAssignmentBadgeText}>
-                  {task.assigned_to === 'me' ? 'Me' : task.assigned_to === 'you' ? (partner?.displayName || 'You') : 'Us'}
-                </Text>
-              </View>
             </View>
 
             {/* Description preview */}
@@ -2087,7 +2083,8 @@ export default function TaskListScreen() {
           renderItem={renderDraggableItem}
           keyExtractor={keyExtractor}
           onDragEnd={onDragEnd}
-          contentContainerStyle={styles.taskListContent}
+          contentContainerStyle={styles.taskListContentManual}
+          ItemSeparatorComponent={null}
           ListEmptyComponent={
             <View style={styles.emptyState}>
               <Text style={styles.emptyStateEmoji}>🎯</Text>
@@ -2812,7 +2809,7 @@ const styles = StyleSheet.create({
   headerButton: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#F9FAFB', justifyContent: 'center', alignItems: 'center' },
   headerButtonActive: { backgroundColor: '#F3E8FF' },
   headerButtonText: { fontSize: 17 },
-  searchContainer: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingBottom: 8, backgroundColor: '#FFFFFF' },
+  searchContainer: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12, backgroundColor: '#FFFFFF' },
   searchInput: { flex: 1, backgroundColor: '#F9FAFB', borderRadius: 8, padding: 12, fontSize: 16, color: '#111827' },
   searchClear: { position: 'absolute', right: 28, padding: 8 },
   searchClearText: { fontSize: 16, color: '#9CA3AF' },
@@ -2932,6 +2929,7 @@ const styles = StyleSheet.create({
   detailedAddButton: { width: 46, height: 46, borderRadius: 10, backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' },
   detailedAddButtonText: { color: '#7C3AED', fontSize: 20, fontWeight: '700' },
   taskListContent: { padding: 12, paddingBottom: 100 },
+  taskListContentManual: { paddingHorizontal: 0, paddingTop: 0, paddingBottom: 100 },
   swipeableContainer: { marginBottom: 12 },
 
   // Compact row styles (Airtable-style)
@@ -2962,7 +2960,7 @@ const styles = StyleSheet.create({
   // Main content area
   rowContent: { flex: 1 },
   rowLine1: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  rowTitle: { fontSize: 14, fontWeight: '600', color: '#111827', flex: 1 },
+  rowTitle: { fontSize: 14, fontWeight: '600', color: '#111827', flexShrink: 1 },
   rowTitleCompleted: { textDecorationLine: 'line-through', color: '#9CA3AF' },
   rowInlineMeta: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   rowAssignmentBadge: { width: 18, height: 18, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
@@ -2973,10 +2971,13 @@ const styles = StyleSheet.create({
   rowDueInlineOverdue: { color: '#DC2626', fontWeight: '600' },
   rowRecurringInline: { fontSize: 11, color: '#8B5CF6' },
 
-  // Line 2: Description + tags
+  // Tag dots inline (after title)
+  rowTagDotsInline: { flexDirection: 'row', alignItems: 'center', gap: 3, marginLeft: 6 },
+  rowTagMini: { width: 8, height: 8, borderRadius: 4 },
+
+  // Line 2: Description + subtasks
   rowLine2: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 1 },
   rowDescriptionInline: { fontSize: 12, color: '#6B7280', flex: 1 },
-  rowTagMini: { width: 8, height: 8, borderRadius: 4 },
   rowSubtaskCount: { fontSize: 11, color: '#10B981', fontWeight: '500' },
 
   // Line 3: Inline subtasks
@@ -3046,12 +3047,11 @@ const styles = StyleSheet.create({
   taskRowDraggable: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingRight: 12,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
-    marginBottom: 0,
   },
   taskRowDragging: {
     shadowColor: '#000',

@@ -1,7 +1,12 @@
 /**
  * Generate app icon for Vectors
  *
- * Creates a gradient purple background with the vectors logo (two arrows)
+ * Creates a gradient purple background with the vectors logo
+ * Exactly matches the header logo in the app:
+ * - headerLogoIcon: 28x28 container
+ * - headerLogoArrow1: 14x14, borderLeft+borderBottom, purple #7C3AED, rotate 45deg, top:3 left:3
+ * - headerLogoArrow2: 14x14, borderRight+borderTop, pink #EC4899, rotate 45deg, bottom:3 right:3
+ *
  * Run with: node scripts/generate-icon.js
  */
 
@@ -9,102 +14,56 @@ const sharp = require('sharp');
 const path = require('path');
 
 const SIZE = 1024;
-const ICON_SIZE = SIZE * 0.4; // Arrow size relative to icon
 
 async function generateIcon() {
-  // Create SVG with gradient background and arrows
-  const svg = `
-    <svg width="${SIZE}" height="${SIZE}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
-          <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#6D28D9;stop-opacity:1" />
-        </linearGradient>
-      </defs>
+  // Exact match to header logo:
+  // In the header, the two L-shaped arrows overlap diagonally
+  // Arrow 1 (purple): upper-left, pointing down-left
+  // Arrow 2 (pink): lower-right, pointing up-right
 
-      <!-- Gradient background -->
-      <rect width="${SIZE}" height="${SIZE}" fill="url(#bgGradient)" rx="180" ry="180"/>
+  const ARM = SIZE * 0.18;        // Length of each arm of chevron
+  const STROKE = SIZE * 0.063;    // Stroke width (10% thinner)
 
-      <!-- Arrow 1 (Purple/Violet - pointing down-left) -->
-      <g transform="translate(${SIZE * 0.32}, ${SIZE * 0.32})">
-        <path
-          d="M ${ICON_SIZE * 0.7} 0
-             L 0 ${ICON_SIZE * 0.7}
-             L ${ICON_SIZE * 0.15} ${ICON_SIZE * 0.7}
-             L ${ICON_SIZE * 0.15} ${ICON_SIZE * 0.85}
-             L 0 ${ICON_SIZE * 0.85}
-             L 0 ${ICON_SIZE * 0.7}
-             L ${ICON_SIZE * 0.7} 0"
-          fill="none"
-          stroke="#C4B5FD"
-          stroke-width="${SIZE * 0.06}"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </g>
+  // Center of icon
+  const cx = SIZE / 2;
+  const cy = SIZE / 2;
 
-      <!-- Arrow 2 (Pink - pointing up-right) -->
-      <g transform="translate(${SIZE * 0.42}, ${SIZE * 0.42})">
-        <path
-          d="M 0 ${ICON_SIZE * 0.7}
-             L ${ICON_SIZE * 0.7} 0"
-          fill="none"
-          stroke="#F472B6"
-          stroke-width="${SIZE * 0.06}"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </g>
-    </svg>
-  `;
+  // Horizontal offset from center for each chevron
+  const OFF_X = SIZE * 0.08;
 
-  // Simple version with cleaner arrows
+  // Vertical offset - purple shifts up, pink shifts down
+  // So bottom of purple aligns with middle of pink, and vice versa
+  const OFF_Y = ARM * 0.5;
+
   const simpleSvg = `
     <svg width="${SIZE}" height="${SIZE}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:1" />
-          <stop offset="50%" style="stop-color:#8B5CF6;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+          <stop offset="0%" style="stop-color:#EDE9FE;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#E9E3FF;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#E4DEFF;stop-opacity:1" />
         </linearGradient>
       </defs>
 
-      <!-- Gradient background with rounded corners for iOS -->
+      <!-- Light purple gradient background -->
       <rect width="${SIZE}" height="${SIZE}" fill="url(#bgGradient)"/>
 
-      <!-- Arrow 1 (Light Purple - pointing down-left) -->
+      <!-- Arrow 1: Purple/Violet < pointing left, shifted UP -->
       <polyline
-        points="${SIZE * 0.55},${SIZE * 0.3} ${SIZE * 0.3},${SIZE * 0.55} ${SIZE * 0.3},${SIZE * 0.42}"
+        points="${cx - OFF_X},${cy - OFF_Y - ARM} ${cx - OFF_X - ARM},${cy - OFF_Y} ${cx - OFF_X},${cy - OFF_Y + ARM}"
         fill="none"
-        stroke="#DDD6FE"
-        stroke-width="${SIZE * 0.055}"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <polyline
-        points="${SIZE * 0.3},${SIZE * 0.55} ${SIZE * 0.43},${SIZE * 0.55}"
-        fill="none"
-        stroke="#DDD6FE"
-        stroke-width="${SIZE * 0.055}"
+        stroke="#7C3AED"
+        stroke-width="${STROKE}"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
 
-      <!-- Arrow 2 (Pink - pointing up-right) -->
+      <!-- Arrow 2: Pink/Magenta > pointing right, shifted DOWN -->
       <polyline
-        points="${SIZE * 0.45},${SIZE * 0.7} ${SIZE * 0.7},${SIZE * 0.45} ${SIZE * 0.7},${SIZE * 0.58}"
+        points="${cx + OFF_X},${cy + OFF_Y - ARM} ${cx + OFF_X + ARM},${cy + OFF_Y} ${cx + OFF_X},${cy + OFF_Y + ARM}"
         fill="none"
-        stroke="#F9A8D4"
-        stroke-width="${SIZE * 0.055}"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <polyline
-        points="${SIZE * 0.7},${SIZE * 0.45} ${SIZE * 0.57},${SIZE * 0.45}"
-        fill="none"
-        stroke="#F9A8D4"
-        stroke-width="${SIZE * 0.055}"
+        stroke="#EC4899"
+        stroke-width="${STROKE}"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
