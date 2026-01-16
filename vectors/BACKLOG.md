@@ -62,7 +62,13 @@ for mobile app:
 
 ### Data & Sync
 - [ ] Offline mode with local-first storage
-- [ ] Import from Trello (migration helper)
+- [ ] **Import from Trello** (HIGH PRIORITY - scoped Jan 2026)
+  - OAuth flow for seamless Trello connection
+  - Full migration: cards, lists, labels, due dates, checklists, assignments
+  - 1 Trello board → 1 Vectors board mapping
+  - Labels → tags with matching colors + infer priority from label names
+  - Checklists → subtasks
+  - UI in both onboarding flow AND settings screen
 - [ ] Export tasks to JSON/CSV
 
 ---
@@ -255,7 +261,7 @@ for mobile app:
 
 ```
 Vectors Root:
-/Users/wallyhansen/Desktop/projects/riverside co/homebase/vectors/
+/Users/wallyhansen/Desktop/projects/riversideco/homebase/vectors/
 
 Key Files:
 ├── App.js                     # Main entry (auth, navigation, GestureHandler)
@@ -293,7 +299,7 @@ Key Files:
 └── /assets                    # App icons and splash screens
 
 Parent Homebase Docs:
-/Users/wallyhansen/Desktop/projects/riverside co/homebase/
+/Users/wallyhansen/Desktop/projects/riversideco/homebase/
 ├── HOMEBASE_PROJECT_BRIEF.md  # Vision, cornerstones, principles
 ├── HOMEBASE_DEVELOPMENT_PLAN.md # Architecture, roadmap
 └── BACKLOG.md                 # Platform-level backlog
@@ -363,7 +369,7 @@ I'm thinking about [architectural decision]. What are the tradeoffs?
 
 ```bash
 # Navigate to project
-cd "/Users/wallyhansen/Desktop/projects/riverside co/homebase/vectors"
+cd "/Users/wallyhansen/Desktop/projects/riversideco/homebase/vectors"
 
 # Install dependencies
 npm install

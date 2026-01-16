@@ -18,7 +18,9 @@
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://eddnrkrvbbrbuzwxlgfc.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZG5ya3J2YmJyYnV6d3hsZ2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1MDI4OTUsImV4cCI6MjA4MzA3ODg5NX0.sqOvpywCBLwyLm3CGP_oBJuQLbRGRkXfe1hqHOj0yfo"
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkZG5ya3J2YmJyYnV6d3hsZ2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1MDI4OTUsImV4cCI6MjA4MzA3ODg5NX0.sqOvpywCBLwyLm3CGP_oBJuQLbRGRkXfe1hqHOj0yfo",
+        "EXPO_PUBLIC_TRELLO_API_KEY": "839c68a112891c049199c01d422afbd6",
+        "EXPO_PUBLIC_TRELLO_REDIRECT_URL": "https://wahans.github.io/homebase/vectors/docs/trello-callback.html"
       }
     }
   }

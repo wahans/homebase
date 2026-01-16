@@ -7,7 +7,7 @@ echo ""
 
 # Check if we're in the right directory
 if [ ! -f "vectors/package.json" ]; then
-    echo "⚠️  Error: Run this from ~/Desktop/personal/riverside co/homebase"
+    echo "⚠️  Error: Run this from ~/Desktop/personal/riversideco/homebase"
     exit 1
 fi
 

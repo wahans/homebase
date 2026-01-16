@@ -9,7 +9,7 @@
 
 **Current Status:** MVP of Vectors (the first app) is complete. Ready to expand.
 
-**Project Location:** `/Users/wallyhansen/Desktop/projects/personal/riverside co/homebase`
+**Project Location:** `/Users/wallyhansen/Desktop/projects/personal/riversideco/homebase`
 
 ---
 

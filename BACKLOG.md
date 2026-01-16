@@ -193,7 +193,7 @@
 
 ```
 Homebase Root:
-/Users/wallyhansen/Desktop/personal/riverside co/homebase/
+/Users/wallyhansen/Desktop/personal/riversideco/homebase/
 
 Key Files:
 ├── HOMEBASE_PROJECT_BRIEF.md      # Vision, cornerstones, principles
@@ -282,7 +282,7 @@ What are the tradeoffs?
 
 ```bash
 # Navigate to project
-cd "/Users/wallyhansen/Desktop/personal/riverside co/homebase"
+cd "/Users/wallyhansen/Desktop/personal/riversideco/homebase"
 
 # Vectors app
 cd vectors

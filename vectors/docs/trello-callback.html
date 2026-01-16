@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vectors - Connecting to Trello...</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+      color: white;
+      text-align: center;
+    }
+    .container {
+      padding: 40px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Connecting to Trello...</h1>
+    <div class="spinner"></div>
+    <p>Redirecting back to Vectors app...</p>
+  </div>
+
+  <script>
+    // Get the token from the URL fragment (Trello returns #token=...)
+    const hash = window.location.hash;
+
+    if (hash && hash.includes('token=')) {
+      // Redirect to the native app with the token
+      const appUrl = 'vectors://trello-callback' + hash;
+      window.location.href = appUrl;
+
+      // Fallback message if redirect doesn't work after 3 seconds
+      setTimeout(function() {
+        document.querySelector('h1').textContent = 'Almost there!';
+        document.querySelector('p').innerHTML =
+          'If the app didn\'t open automatically,<br>' +
+          '<a href="' + appUrl + '" style="color: white; text-decoration: underline;">tap here to open Vectors</a>';
+        document.querySelector('.spinner').style.display = 'none';
+      }, 3000);
+    } else {
+      // No token found
+      document.querySelector('h1').textContent = 'Connection Failed';
+      document.querySelector('p').textContent = 'No authorization token received. Please try again from the app.';
+      document.querySelector('.spinner').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

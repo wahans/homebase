@@ -23,6 +23,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import QRCode from 'react-native-qrcode-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '../lib/supabase';
+import TrelloImportModal from '../components/TrelloImportModal';
+import SettingsModal from '../components/SettingsModal';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -93,7 +95,11 @@ export default function TaskListScreen() {
   const [inviteCode, setInviteCode] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [partnerDisplayName, setPartnerDisplayName] = useState('');
-  
+
+  // Settings & Trello Import
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showTrelloImportModal, setShowTrelloImportModal] = useState(false);
+
   // Add task modal
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTaskAssignment, setNewTaskAssignment] = useState('me');
@@ -1840,6 +1846,9 @@ export default function TaskListScreen() {
           <TouchableOpacity style={styles.headerButton} onPress={() => setShowPartnerModal(true)}>
             <Text style={styles.headerButtonText}>{partner ? '👫' : '👤'}</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton} onPress={() => setShowSettingsModal(true)}>
+            <Text style={styles.headerButtonText}>⚙️</Text>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
 
@@ -2793,6 +2802,30 @@ export default function TaskListScreen() {
           </ScrollView>
         </View>
       </Modal>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        visible={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        onSignOut={() => {}}
+        onOpenTrelloImport={() => {
+          setShowSettingsModal(false);
+          setShowTrelloImportModal(true);
+        }}
+        currentUser={currentUser}
+        partner={partner}
+      />
+
+      {/* Trello Import Modal */}
+      <TrelloImportModal
+        visible={showTrelloImportModal}
+        onClose={() => setShowTrelloImportModal(false)}
+        onImportComplete={() => {
+          fetchTasks();
+          fetchBoards();
+          fetchTags();
+        }}
+      />
     </GestureHandlerRootView>
   );
 }
