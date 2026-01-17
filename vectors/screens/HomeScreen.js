@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '../lib/supabase';
 
 export default function HomeScreen({ navigation }) {
@@ -9,8 +10,17 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Background accent */}
-      <View style={styles.backgroundAccent} />
+      {/* Gradient background */}
+      <LinearGradient
+        colors={['#F5F3FF', '#FDF2F8', '#ECFDF5', '#F5F3FF']}
+        locations={[0, 0.3, 0.6, 1]}
+        style={StyleSheet.absoluteFill}
+      />
+
+      {/* Floating color blobs */}
+      <View style={[styles.blob, styles.blobPurple]} />
+      <View style={[styles.blob, styles.blobPink]} />
+      <View style={[styles.blob, styles.blobGreen]} />
 
       {/* Main content */}
       <View style={styles.content}>
@@ -24,7 +34,7 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Tagline */}
-        <Text style={styles.tagline}>Your family's task manager</Text>
+        <Text style={styles.tagline}>to-do lists built for you</Text>
 
         {/* Decorative dots */}
         <View style={styles.dots}>
@@ -61,15 +71,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  backgroundAccent: {
+  blob: {
     position: 'absolute',
-    top: -100,
-    right: -100,
-    width: 300,
-    height: 300,
-    borderRadius: 150,
-    backgroundColor: '#F0F9FF',
-    opacity: 0.8,
+    borderRadius: 100,
+    opacity: 0.4,
+  },
+  blobPurple: {
+    width: 200,
+    height: 200,
+    top: 50,
+    right: -50,
+    backgroundColor: '#DDD6FE',
+  },
+  blobPink: {
+    width: 150,
+    height: 150,
+    top: 200,
+    left: -30,
+    backgroundColor: '#FBCFE8',
+  },
+  blobGreen: {
+    width: 180,
+    height: 180,
+    bottom: 150,
+    right: 20,
+    backgroundColor: '#A7F3D0',
   },
   content: {
     flex: 1,
